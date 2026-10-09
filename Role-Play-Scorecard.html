@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Role play scorecard | Insight new hire seller onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Roboto+Slab:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Insight master brand palette */
+    --hustle: #D30C55; --inspired: #ED1944; --heart: #B01C87; --hunger: #D40E8C;
+    --harmony: #582873; --vision: #5990F0; --zeal: #4EC7EA;
+    --carbon: #3E332D; --cloud: #BDBDBD; --calm: #E0E0E0;
+    --hunger-lite: #F8D5F8; --harmony-lite: #E8DAFF; --vision-lite: #D0E2FF;
+    --hunger-sheer: #FFF2FD; --harmony-sheer: #EFEDFE; --vision-sheer: #E5F6FF; --clarity: #F5F5F5;
+
+    --fac: var(--hunger);   /* facilitator series */
+    --lead: var(--vision);  /* frontline leader series */
+    --font: "Greycliff CF", "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --slab: "Klinic Slab", "Roboto Slab", Georgia, serif;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(62,51,45,.06), 0 4px 16px rgba(62,51,45,.06);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: var(--font); color: var(--carbon); background: var(--clarity); font-size: 15px; line-height: 1.45; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { letter-spacing: -0.5px; margin: 0; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Hero */
+  .hero { background: linear-gradient(115deg, var(--harmony) 0%, var(--heart) 55%, var(--hunger) 100%); color: #fff; position: relative; overflow: hidden; }
+  .hero::after { content: ""; position: absolute; right: -80px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: rgba(255,255,255,.08); }
+  .hero .wrap { padding-top: 34px; padding-bottom: 30px; position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+  .eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; opacity: .9; margin: 0 0 8px; }
+  .hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.05; }
+  .hero .sub { font-family: var(--slab); font-weight: 500; font-size: 17px; margin: 10px 0 0; opacity: .95; max-width: 640px; }
+  .btn-ghost-light { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.5); color: #fff; padding: 9px 16px; border-radius: 999px; font-weight: 700; cursor: pointer; }
+  .btn-ghost-light:hover { background: rgba(255,255,255,.24); }
+
+  /* Stepper */
+  .stepper { display: flex; gap: 8px; margin-top: -1px; padding-top: 18px; padding-bottom: 6px; flex-wrap: wrap; }
+  .step-btn { flex: 1 1 200px; display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--calm); border-radius: var(--radius); padding: 12px 16px; cursor: pointer; text-align: left; box-shadow: var(--shadow); }
+  .step-btn .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--calm); color: var(--carbon); flex: none; }
+  .step-btn .t { font-weight: 700; }
+  .step-btn .s { font-size: 12.5px; color: #6f6560; }
+  .step-btn[aria-current="step"] { border-color: var(--heart); box-shadow: 0 0 0 2px var(--hunger-lite), var(--shadow); }
+  .step-btn[aria-current="step"] .n { background: var(--heart); color: #fff; }
+  .step-btn.done .n { background: var(--harmony); color: #fff; }
+
+  main { padding-top: 16px; padding-bottom: 60px; }
+  .card { background: #fff; border: 1px solid var(--calm); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+  .section-title { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+  .section-sub { color: #6f6560; margin: 0 0 20px; }
+  [hidden] { display: none !important; }
+
+  /* Form */
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px 22px; }
+  .group-label { grid-column: 1 / -1; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--heart); border-bottom: 1px solid var(--calm); padding-bottom: 6px; margin-top: 8px; }
+  .field label { display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; }
+  .field .req { color: var(--hustle); }
+  .field input, .field textarea, textarea.fb { width: 100%; border: 1px solid var(--cloud); border-radius: 10px; padding: 10px 12px; background: #fff; transition: border-color .15s, box-shadow .15s; }
+  .field input:focus, textarea:focus { outline: none; border-color: var(--heart); box-shadow: 0 0 0 3px var(--hunger-lite); }
+  .field input.invalid { border-color: var(--hustle); box-shadow: 0 0 0 3px #fbd3df; }
+  .grid.one-col { grid-template-columns: minmax(0, 520px); }
+  .name-preview { font-size: 12.5px; color: var(--harmony); font-weight: 700; margin-top: 5px; min-height: 18px; }
+  .hint { font-size: 12.5px; color: #6f6560; margin-top: 5px; }
+  .err { color: var(--hustle); font-weight: 600; font-size: 13px; margin-top: 12px; }
+
+  .actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: 999px; padding: 12px 22px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: transform .05s, background .15s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--heart); color: #fff; }
+  .btn-primary:hover { background: #971673; }
+  .btn-secondary { background: #fff; color: var(--heart); border: 2px solid var(--heart); padding: 10px 20px; }
+  .btn-secondary:hover { background: var(--hunger-sheer); }
+  .btn-quiet { background: transparent; color: var(--carbon); text-decoration: underline; padding: 12px 8px; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn:focus-visible, .step-btn:focus-visible, .tab:focus-visible { outline: 3px solid var(--vision); outline-offset: 2px; }
+
+  /* Scoring layout */
+  .score-layout { display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 22px; align-items: start; }
+  .tabs { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab { flex: 1 1 240px; border: 2px solid var(--calm); background: #fff; border-radius: var(--radius); padding: 12px 16px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .tab .who { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+  .tab .nm { font-weight: 700; font-size: 16px; }
+  .tab .prog { font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--clarity); white-space: nowrap; }
+  .tab.fac .who { color: var(--fac); } .tab.lead .who { color: #2f6fd6; }
+  .tab[aria-selected="true"].fac { border-color: var(--fac); background: var(--hunger-sheer); }
+  .tab[aria-selected="true"].lead { border-color: var(--lead); background: var(--vision-sheer); }
+  .tab .prog.complete { background: var(--harmony); color: #fff; }
+
+  .scoring-intro { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .scoring-intro p { margin: 0; color: #6f6560; }
+  .crit { background: #fff; border: 1px solid var(--calm); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 18px 14px; margin-bottom: 14px; }
+  .crit > header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .crit .num { width: 28px; height: 28px; border-radius: 8px; background: var(--harmony-sheer); color: var(--harmony); font-weight: 800; display: grid; place-items: center; flex: none; }
+  .crit h3 { font-size: 18px; font-weight: 800; flex: 1; }
+  .crit .crit-score { font-weight: 800; color: var(--heart); font-size: 15px; }
+  .crit .crit-score.empty { color: var(--cloud); font-weight: 600; font-size: 13px; }
+  .opts { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; }
+  .opt { position: relative; cursor: pointer; display: block; }
+  .opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .tile { display: flex; flex-direction: column; gap: 6px; height: 100%; border: 2px solid var(--calm); border-radius: 12px; padding: 10px 11px 12px; background: #fff; transition: border-color .12s, background .12s, box-shadow .12s; }
+  .opt:hover .tile { border-color: var(--hunger-lite); background: var(--hunger-sheer); }
+  .tile .top { display: flex; align-items: center; gap: 8px; }
+  .tile .badge { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--clarity); border: 1px solid var(--calm); flex: none; }
+  .tile .lvl { font-weight: 800; font-size: 13.5px; line-height: 1.15; }
+  .tile .desc { font-size: 12.5px; color: #5e5450; line-height: 1.38; }
+  .opt input:checked + .tile { border-color: var(--heart); background: var(--hunger-sheer); box-shadow: 0 0 0 3px var(--hunger-lite); }
+  .opt input:checked + .tile .badge { background: var(--heart); border-color: var(--heart); color: #fff; }
+  .opt input:focus-visible + .tile { outline: 3px solid var(--vision); outline-offset: 2px; }
+  .crit details { margin-top: 10px; }
+  .crit summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--heart); width: max-content; }
+  .crit details textarea { margin-top: 8px; width: 100%; min-height: 64px; border: 1px solid var(--cloud); border-radius: 10px; padding: 9px 11px; resize: vertical; }
+  .feedback-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+  textarea.fb { min-height: 130px; resize: vertical; margin-top: 8px; }
+
+  /* Summary panel */
+  .summary { position: sticky; top: 16px; }
+  .summary h3 { font-size: 17px; font-weight: 800; margin-bottom: 14px; }
+  .overall { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 12px; background: linear-gradient(120deg, var(--hunger-sheer), var(--harmony-sheer)); margin-bottom: 14px; }
+  .ring { --p: 0; width: 72px; height: 72px; border-radius: 50%; flex: none; display: grid; place-items: center; background: conic-gradient(var(--heart) calc(var(--p) * 1%), var(--calm) 0); }
+  .ring span { width: 56px; height: 56px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 800; font-size: 19px; }
+  .overall .lbl { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--harmony); }
+  .overall .val { font-size: 18px; font-weight: 800; }
+  .rev-rows { display: grid; gap: 8px; margin-bottom: 14px; }
+  .rev-row { display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; padding: 8px 10px; border-radius: 10px; background: var(--clarity); }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: middle; }
+  .dot.fac { background: var(--fac); } .dot.lead { background: var(--lead); }
+  .crit-rows { display: grid; gap: 10px; }
+  .crit-row .nm { font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; gap: 6px; }
+  .bars { display: grid; gap: 3px; margin-top: 4px; }
+  .bar { height: 7px; border-radius: 4px; background: var(--calm); overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 4px; }
+  .bar.fac i { background: var(--fac); } .bar.lead i { background: var(--lead); }
+  .flag { font-size: 11px; font-weight: 800; color: var(--harmony); background: var(--harmony-lite); padding: 1px 7px; border-radius: 999px; white-space: nowrap; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: #6f6560; margin-top: 14px; flex-wrap: wrap; }
+
+  /* Review & send */
+  .review-layout { display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: 22px; align-items: start; }
+  .report-frame { background: #fff; border: 1px solid var(--calm); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; overflow-x: auto; }
+  .send { position: sticky; top: 16px; }
+  .send h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .send .btn { width: 100%; justify-content: center; margin-top: 10px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 13.5px; cursor: pointer; }
+  .check input { width: 18px; height: 18px; accent-color: var(--heart); margin-top: 1px; flex: none; }
+  .to-line { background: var(--clarity); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; margin-top: 10px; word-break: break-word; }
+  .note-box { font-size: 12.5px; color: #6f6560; margin-top: 14px; border-left: 3px solid var(--hunger-lite); padding-left: 10px; }
+  .warn { background: #fff4e5; border: 1px solid #f3c98b; color: #6b4a12; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-top: 12px; }
+
+  #toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--carbon); color: #fff; padding: 12px 20px; border-radius: 999px; font-weight: 700; opacity: 0; pointer-events: none; transition: all .2s; z-index: 50; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer { text-align: center; font-size: 12px; color: #8a807b; padding: 0 0 30px; }
+
+  @media (max-width: 1080px) {
+    .score-layout, .review-layout { grid-template-columns: 1fr; }
+    .summary, .send { position: static; }
+  }
+  @media (max-width: 820px) {
+    .opts { grid-template-columns: 1fr; }
+    .tile { flex-direction: row; align-items: flex-start; gap: 12px; }
+    .tile .top { flex-direction: column; align-items: flex-start; min-width: 96px; gap: 4px; }
+    .grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+  }
+
+  /* Print: only the results report */
+  @media print {
+    body { background: #fff; }
+    .hero, .stepper, #step1, #step2, .send, footer, #toast { display: none !important; }
+    #step3 { display: block !important; }
+    .review-layout { display: block; }
+    .report-frame { border: 0; box-shadow: none; padding: 0; }
+    main { padding: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Insight · Global Sales Enablement · New hire seller onboarding</p>
+      <h1>Role play scorecard</h1>
+      <p class="sub">Score the role play together, review the results, and send them to your new hire in a few clicks.</p>
+    </div>
+    <button class="btn-ghost-light" id="newEval" type="button">+ Start new evaluation</button>
+  </div>
+</header>
+
+<nav class="wrap stepper" aria-label="Progress">
+  <button class="step-btn" data-goto="1" type="button"><span class="n">1</span><span><span class="t">Session details</span><br><span class="s">New hire and reviewers</span></span></button>
+  <button class="step-btn" data-goto="2" type="button"><span class="n">2</span><span><span class="t">Score the role play</span><br><span class="s">Facilitator and frontline leader</span></span></button>
+  <button class="step-btn" data-goto="3" type="button"><span class="n">3</span><span><span class="t">Review and send</span><br><span class="s">Email results to the new hire</span></span></button>
+</nav>
+
+<main class="wrap">
+
+  <!-- STEP 1 -->
+  <section id="step1" class="card" aria-labelledby="s1title">
+    <h2 class="section-title" id="s1title">Session details</h2>
+    <p class="section-sub">Enter work emails. Names on the scorecard and results email are filled in from these.</p>
+
+    <div class="grid one-col">
+      <div class="field">
+        <label for="hireEmail">New hire email <span class="req">*</span></label>
+        <input id="hireEmail" data-field="hireEmail" type="email" autocomplete="off" placeholder="first.last@insight.com">
+        <div class="name-preview" data-preview="hireEmail"></div>
+      </div>
+      <div class="field">
+        <label for="facEmail">Facilitator email <span class="req">*</span></label>
+        <input id="facEmail" data-field="facEmail" type="email" autocomplete="off" placeholder="first.last@insight.com">
+        <div class="name-preview" data-preview="facEmail"></div>
+      </div>
+      <div class="field">
+        <label for="leadEmail">Frontline leader email</label>
+        <input id="leadEmail" data-field="leadEmail" type="email" autocomplete="off" placeholder="Optional: first.last@insight.com">
+        <div class="name-preview" data-preview="leadEmail"></div>
+      </div>
+    </div>
+
+    <p class="err" id="s1err" hidden></p>
+    <div class="actions">
+      <span class="hint">Your work saves automatically in this browser until you start a new evaluation.</span>
+      <button class="btn btn-primary" type="button" id="toStep2">Continue to scoring →</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section id="step2" hidden aria-labelledby="s2title">
+    <div class="score-layout">
+      <div>
+        <h2 class="sr-only" id="s2title">Score the role play</h2>
+        <div class="tabs" role="tablist" id="tabs"></div>
+        <div class="scoring-intro">
+          <p id="scoringHint"></p>
+        </div>
+        <div id="criteria"></div>
+        <div class="card feedback-card">
+          <h3>Additional feedback</h3>
+          <p class="section-sub" style="margin:0" id="fbHint">Open-ended feedback for the new hire.</p>
+          <label class="sr-only" for="feedback">Additional feedback</label>
+          <textarea class="fb" id="feedback" placeholder="What went well? What should they focus on next?"></textarea>
+        </div>
+        <p class="err" id="s2err" hidden></p>
+        <div class="actions">
+          <button class="btn btn-secondary" type="button" data-goto="1">← Back</button>
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button class="btn btn-secondary" type="button" id="switchReviewer"></button>
+            <button class="btn btn-primary" type="button" id="toStep3">Review results →</button>
+          </div>
+        </div>
+      </div>
+      <aside class="card summary" id="summary" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section id="step3" hidden aria-labelledby="s3title">
+    <div class="review-layout">
+      <div>
+        <h2 class="section-title" id="s3title" style="margin-bottom:12px">Review results</h2>
+        <div class="report-frame" id="report"></div>
+      </div>
+      <aside class="card send">
+        <h3>Send to the new hire</h3>
+        <p class="section-sub" style="margin:0">Opens a ready-to-send email in Outlook (or your default email app). You can review it before you send.</p>
+        <div class="to-line" id="toLine"></div>
+        <label class="check"><input type="checkbox" id="ccReviewers"> <span>CC the facilitator and frontline leader</span></label>
+        <label class="check"><input type="checkbox" id="includeNotes"> <span>Include category coaching notes</span></label>
+        <div id="sendWarn"></div>
+        <button class="btn btn-primary" type="button" id="emailBtn">✉ Email results to new hire</button>
+        <button class="btn btn-secondary" type="button" id="copyBtn">Copy formatted results</button>
+        <button class="btn btn-secondary" type="button" id="printBtn">Print or save as PDF</button>
+        <div class="note-box">
+          <strong>Tip:</strong> Want the formatted version with tables? Click <em>Copy formatted results</em>, then paste it into the body of the email over the plain-text summary.
+        </div>
+        <div class="actions" style="margin-top:16px">
+          <button class="btn btn-quiet" type="button" data-goto="2">← Back to scoring</button>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer>Insight Global Sales Enablement · Scores stay on this device. Nothing is uploaded.</footer>
+<div id="toast" role="status"></div>
+
+<script>
+(() => {
+  const STORE_KEY = "insight-roleplay-scorecard-v1";
+
+  const LEVELS = { 5: "Excellent", 4: "Good", 3: "Average", 2: "Below average", 1: "Poor" };
+
+  const CRITERIA = [
+    { id: "comm", name: "Communication skills", levels: {
+      5: "Communicates clearly and confidently. Engages the client with compelling storytelling and persuasive language. Adapts tone and style to the client's preferences.",
+      4: "Communicates effectively with clear and confident language. Uses storytelling and persuasive language but may lack some engagement.",
+      3: "Communicates adequately but lacks confidence and engagement. Uses basic language and storytelling.",
+      2: "Struggles with clear communication. Limited use of storytelling and persuasive language.",
+      1: "Fails to communicate effectively. No use of storytelling or persuasive language." } },
+    { id: "prep", name: "Preparation and knowledge", levels: {
+      5: "Demonstrates thorough understanding of the client's business, industry, and specific needs. Uses data and insights effectively to tailor the pitch.",
+      4: "Shows good knowledge of the client's business and industry. Uses relevant data and insights but may miss some specific client needs.",
+      3: "Displays basic understanding of the client's business and industry. Uses general data and insights, lacking personalization.",
+      2: "Limited knowledge of the client's business and industry. Uses minimal data and insights, with little to no personalization.",
+      1: "Shows little to no understanding of the client's business and industry. Fails to use data and insights effectively." } },
+    { id: "struct", name: "Structure and organization", levels: {
+      5: "Presents a well-structured and organized pitch. Clearly outlines the agenda, objectives, and key points. Smooth transitions between topics.",
+      4: "Presents a structured pitch with clear agenda and objectives. Some transitions may be less smooth.",
+      3: "Presents a basic structure with a general agenda and objectives. Transitions may be abrupt or unclear.",
+      2: "Lacks clear structure and organization. Agenda and objectives are vague or missing.",
+      1: "No structure or organization. Fails to outline agenda and objectives." } },
+    { id: "engage", name: "Engagement and interaction", levels: {
+      5: "Actively engages the client throughout the pitch. Encourages questions and feedback. Responds effectively to client concerns and interests.",
+      4: "Engages the client but may miss some opportunities for interaction. Responds well to client questions and feedback.",
+      3: "Limited engagement with the client. Responds to questions but lacks proactive interaction.",
+      2: "Minimal engagement with the client. Struggles to respond to questions and feedback.",
+      1: "No engagement with the client. Fails to respond to questions and feedback." } },
+    { id: "value", name: "Value proposition", levels: {
+      5: "Clearly articulates the value proposition and benefits to the client. Uses specific examples and data to support claims.",
+      4: "Articulates the value proposition and benefits but may lack some specificity. Uses examples and data to support claims.",
+      3: "Provides a general value proposition with basic benefits. Limited use of examples and data.",
+      2: "Struggles to articulate the value proposition. Minimal benefits and examples.",
+      1: "Fails to articulate the value proposition. No benefits or supporting examples." } },
+    { id: "close", name: "Closing and next steps", levels: {
+      5: "Concludes the pitch with a clear summary and actionable next steps. Confidently asks for commitment or follow-up.",
+      4: "Concludes with a summary and next steps but may lack some clarity. Asks for commitment or follow-up.",
+      3: "Provides a basic conclusion with general next steps. Limited ask for commitment or follow-up.",
+      2: "Weak conclusion with vague next steps. Struggles to ask for commitment or follow-up.",
+      1: "No clear conclusion or next steps. Fails to ask for commitment or follow-up." } },
+  ];
+  const MAX = CRITERIA.length * 5;
+  const REVIEWERS = ["facilitator", "leader"];
+  const ROLE = { facilitator: "Facilitator", leader: "Frontline leader" };
+
+  // ---------- state ----------
+  const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+  const blankReviewer = () => ({ scores: {}, notes: {}, feedback: "" });
+  const defaultState = () => ({
+    step: 1, active: "facilitator", cc: true, includeNotes: true,
+    session: { hireEmail: "", facEmail: "", leadEmail: "", date: today() },
+    reviewers: { facilitator: blankReviewer(), leader: blankReviewer() },
+  });
+  let state;
+  try { state = Object.assign(defaultState(), JSON.parse(localStorage.getItem(STORE_KEY)) || {}); } catch { state = defaultState(); }
+  const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {} };
+
+  // ---------- helpers ----------
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const nl2br = (s) => esc(s).replace(/\n/g, "<br>");
+  const isEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s).trim());
+  const fmt1 = (n) => (Math.round(n * 10) / 10).toFixed(1);
+  const firstName = (s) => (String(s).trim().split(/\s+/)[0] || "there");
+  // "brandi.rascoe-trotter@insight.com" -> "Brandi Rascoe-Trotter"
+  const nameFromEmail = (e) => (String(e || "").trim().split("@")[0] || "")
+    .split(/[._]+/).map((w) => w.replace(/\d+/g, "")).filter(Boolean)
+    .map((w) => w.split("-").map((p) => (p ? p[0].toUpperCase() + p.slice(1).toLowerCase() : p)).join("-"))
+    .join(" ");
+  const hireName = () => nameFromEmail(state.session.hireEmail) || "New hire";
+  const leaderGiven = () => isEmail(state.session.leadEmail);
+  const reviewerName = (rev) => nameFromEmail(rev === "facilitator" ? state.session.facEmail : state.session.leadEmail) || ROLE[rev];
+  const levelFor = (avg) => LEVELS[Math.min(5, Math.max(1, Math.round(avg)))];
+  const prettyDate = (iso) => { if (!iso) return ""; const [y, m, d] = iso.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }); };
+
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2600); }
+
+  function revStats(rev) {
+    const s = state.reviewers[rev].scores;
+    const vals = CRITERIA.map((c) => s[c.id]).filter(Boolean);
+    const total = vals.reduce((a, b) => a + b, 0);
+    return { count: vals.length, total, avg: vals.length ? total / vals.length : null, complete: vals.length === CRITERIA.length, started: vals.length > 0 };
+  }
+  const activeReviewers = () => REVIEWERS.filter((r) => revStats(r).started);
+  function combined(cid) {
+    const vals = REVIEWERS.map((r) => state.reviewers[r].scores[cid]).filter(Boolean);
+    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  }
+  function overall() {
+    const vals = CRITERIA.map((c) => combined(c.id)).filter((v) => v != null);
+    return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  }
+  function strengthsAndFocus() {
+    const rows = CRITERIA.map((c) => ({ c, v: combined(c.id) })).filter((r) => r.v != null);
+    if (rows.length < CRITERIA.length) return { strengths: [], focus: [] };
+    const hi = Math.max(...rows.map((r) => r.v)), lo = Math.min(...rows.map((r) => r.v));
+    if (hi === lo) return { strengths: [], focus: [] };
+    return { strengths: rows.filter((r) => r.v === hi).map((r) => r.c), focus: rows.filter((r) => r.v === lo).map((r) => r.c) };
+  }
+  const gap = (cid) => {
+    const f = state.reviewers.facilitator.scores[cid], l = state.reviewers.leader.scores[cid];
+    return f && l ? Math.abs(f - l) : 0;
+  };
+
+  // ---------- navigation ----------
+  function validateStep1(showErrors = true) {
+    const s = state.session, problems = [];
+    const mark = (id, bad) => $("#" + id).classList.toggle("invalid", showErrors && bad);
+    const badHire = !isEmail(s.hireEmail), badFac = !isEmail(s.facEmail), badLead = s.leadEmail.trim() && !isEmail(s.leadEmail);
+    mark("hireEmail", badHire); mark("facEmail", badFac); mark("leadEmail", badLead);
+    if (badHire) problems.push("a valid new hire email");
+    if (badFac) problems.push("a valid facilitator email");
+    if (badLead) problems.push("a valid frontline leader email (or leave it blank)");
+    const err = $("#s1err");
+    if (showErrors && problems.length) { err.textContent = "Please add " + problems.join(", ") + "."; err.hidden = false; } else err.hidden = true;
+    return !problems.length;
+  }
+  function validateStep2(showErrors = true) {
+    const err = $("#s2err");
+    const done = REVIEWERS.filter((r) => revStats(r).complete);
+    let msg = "";
+    if (!done.length) msg = "At least one reviewer needs to score all six categories before you can review results.";
+    if (showErrors && msg) { err.textContent = msg; err.hidden = false; } else err.hidden = true;
+    return !msg;
+  }
+  function goto(step) {
+    step = Number(step);
+    if (step > 1 && !validateStep1()) step = 1;
+    if (step > 2 && !validateStep2()) { step = 2; }
+    state.step = step; save();
+    [1, 2, 3].forEach((n) => ($("#step" + n).hidden = n !== step));
+    $$(".step-btn").forEach((b) => {
+      const n = Number(b.dataset.goto);
+      b.toggleAttribute("aria-current", n === step); if (n === step) b.setAttribute("aria-current", "step");
+      b.classList.toggle("done", n < step);
+    });
+    if (step === 2) renderScoring();
+    if (step === 3) renderReview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ---------- step 1 ----------
+  function renderPreviews() {
+    $$("[data-preview]").forEach((p) => {
+      const v = state.session[p.dataset.preview] || "";
+      p.textContent = isEmail(v) && nameFromEmail(v) ? `Will appear as: ${nameFromEmail(v)}` : "";
+    });
+  }
+  $$("[data-field]").forEach((el) => {
+    el.value = state.session[el.dataset.field] || "";
+    el.addEventListener("input", () => {
+      state.session[el.dataset.field] = el.value; save(); renderPreviews();
+      if (!$("#s1err").hidden) validateStep1();
+      else el.classList.remove("invalid");
+    });
+  });
+
+  // ---------- step 2 ----------
+  function renderTabs() {
+    $("#tabs").innerHTML = REVIEWERS.map((r) => {
+      const st = revStats(r);
+      const cls = r === "facilitator" ? "fac" : "lead";
+      const prog = st.complete ? `✓ ${st.total}/${MAX}` : `${st.count}/${CRITERIA.length} scored`;
+      return `<button class="tab ${cls}" role="tab" type="button" data-rev="${r}" aria-selected="${state.active === r}">
+        <span><span class="who">${ROLE[r]}${r === "leader" ? " (optional)" : ""}</span><br><span class="nm">${esc(reviewerName(r))}</span></span>
+        <span class="prog ${st.complete ? "complete" : ""}">${prog}</span></button>`;
+    }).join("");
+    const other = state.active === "facilitator" ? "leader" : "facilitator";
+    $("#switchReviewer").textContent = `Switch to ${ROLE[other].toLowerCase()} →`;
+  }
+
+  function renderScoring() {
+    const rev = state.active, r = state.reviewers[rev];
+    renderTabs();
+    $("#scoringHint").innerHTML = `Scoring as <strong>${esc(reviewerName(rev))}</strong> (${ROLE[rev].toLowerCase()}). Choose one rating per category. Each reviewer scores independently, and results combine automatically.`;
+    $("#criteria").innerHTML = CRITERIA.map((c, i) => {
+      const sel = r.scores[c.id];
+      return `<article class="crit" data-crit="${c.id}">
+        <header><span class="num">${i + 1}</span><h3 id="h-${c.id}">${c.name}</h3>
+          <span class="crit-score ${sel ? "" : "empty"}">${sel ? `${sel} / 5 · ${LEVELS[sel]}` : "Not scored"}</span></header>
+        <div class="opts" role="radiogroup" aria-labelledby="h-${c.id}">
+          ${[5, 4, 3, 2, 1].map((n) => `<label class="opt"><input type="radio" name="${rev}-${c.id}" value="${n}" data-crit="${c.id}" ${sel === n ? "checked" : ""}>
+            <span class="tile"><span class="top"><span class="badge">${n}</span><span class="lvl">${LEVELS[n]}</span></span><span class="desc">${c.levels[n]}</span></span></label>`).join("")}
+        </div>
+        <details ${r.notes[c.id] ? "open" : ""}><summary>${r.notes[c.id] ? "Coaching note" : "+ Add a coaching note"}</summary>
+          <textarea data-note="${c.id}" aria-label="Coaching note for ${c.name}" placeholder="Specific example or tip for this category">${esc(r.notes[c.id] || "")}</textarea></details>
+      </article>`;
+    }).join("");
+    $("#feedback").value = r.feedback || "";
+    $("#fbHint").textContent = `From ${reviewerName(rev)}. Open-ended feedback for the new hire.`;
+    renderSummary();
+  }
+
+  function renderSummary() {
+    const ov = overall();
+    const revRows = REVIEWERS.map((r) => {
+      const st = revStats(r);
+      const val = st.complete ? `<strong>${st.total}/${MAX}</strong> · ${fmt1(st.avg)} avg` : st.started ? `${st.count} of ${CRITERIA.length} scored` : "Not started";
+      return `<div class="rev-row"><span><span class="dot ${r === "facilitator" ? "fac" : "lead"}"></span>${esc(reviewerName(r))}</span><span>${val}</span></div>`;
+    }).join("");
+    const critRows = CRITERIA.map((c) => {
+      const f = state.reviewers.facilitator.scores[c.id], l = state.reviewers.leader.scores[c.id];
+      const cv = combined(c.id);
+      return `<div class="crit-row"><div class="nm"><span>${c.name}</span><span>${gap(c.id) >= 2 ? '<span class="flag" title="Reviewers are 2+ points apart. Worth a quick calibration conversation.">Calibrate</span> ' : ""}${cv != null ? fmt1(cv) : "–"}</span></div>
+        <div class="bars"><div class="bar fac"><i style="width:${(f || 0) * 20}%"></i></div><div class="bar lead"><i style="width:${(l || 0) * 20}%"></i></div></div></div>`;
+    }).join("");
+    $("#summary").innerHTML = `<h3>Live results</h3>
+      <div class="overall"><div class="ring" style="--p:${ov ? ov * 20 : 0}"><span>${ov ? fmt1(ov) : "–"}</span></div>
+        <div><div class="lbl">Combined score</div><div class="val">${ov ? `${levelFor(ov)}` : "Awaiting scores"}</div><div class="hint" style="margin:0">Average of all ratings, out of 5</div></div></div>
+      <div class="rev-rows">${revRows}</div>
+      <div class="crit-rows">${critRows}</div>
+      <div class="legend"><span><span class="dot fac"></span>Facilitator</span><span><span class="dot lead"></span>Frontline leader</span><span><span class="flag">Calibrate</span> 2+ points apart</span></div>`;
+  }
+
+  $("#tabs").addEventListener("click", (e) => {
+    const b = e.target.closest(".tab"); if (!b) return;
+    state.active = b.dataset.rev; save(); renderScoring();
+  });
+  $("#switchReviewer").addEventListener("click", () => {
+    state.active = state.active === "facilitator" ? "leader" : "facilitator"; save(); renderScoring();
+    window.scrollTo({ top: $("#tabs").offsetTop - 10, behavior: "smooth" });
+  });
+  $("#criteria").addEventListener("change", (e) => {
+    const inp = e.target; if (inp.type !== "radio") return;
+    const cid = inp.dataset.crit, n = Number(inp.value);
+    state.reviewers[state.active].scores[cid] = n; save();
+    const sc = $(`.crit[data-crit="${cid}"] .crit-score`);
+    sc.textContent = `${n} / 5 · ${LEVELS[n]}`; sc.classList.remove("empty");
+    renderTabs(); renderSummary();
+    if (!$("#s2err").hidden) validateStep2();
+  });
+  $("#criteria").addEventListener("input", (e) => {
+    const ta = e.target; if (!ta.dataset.note) return;
+    const v = ta.value;
+    if (v.trim()) state.reviewers[state.active].notes[ta.dataset.note] = v; else delete state.reviewers[state.active].notes[ta.dataset.note];
+    save();
+  });
+  $("#feedback").addEventListener("input", (e) => { state.reviewers[state.active].feedback = e.target.value; save(); });
+
+  // ---------- step 3: report builders ----------
+  function reportData() {
+    const revs = activeReviewers();
+    return { s: state.session, revs, ov: overall(), sf: strengthsAndFocus(), includeNotes: state.includeNotes };
+  }
+
+  // Email-safe HTML (inline styles, tables) — used for preview, copy, and print.
+  function reportHtml() {
+    const { s, revs, ov, sf, includeNotes } = reportData();
+    const F = "font-family:Arial,Helvetica,sans-serif;";
+    const th = `${F}font-size:12px;font-weight:bold;color:#ffffff;background:#582873;padding:9px 10px;text-align:left;`;
+    const td = `${F}font-size:13px;color:#3E332D;padding:9px 10px;border-bottom:1px solid #E0E0E0;vertical-align:top;`;
+    const revColor = { facilitator: "#B01C87", leader: "#2F6FD6" };
+    const meta = [
+      ["New hire", esc(hireName())],
+      ["Role play date", esc(prettyDate(s.date))],
+      ["Facilitator", esc(reviewerName("facilitator"))],
+      leaderGiven() ? ["Frontline leader", esc(reviewerName("leader"))] : null,
+    ].filter(Boolean);
+
+    const rows = CRITERIA.map((c, i) => {
+      const cv = combined(c.id);
+      const cells = revs.map((r) => {
+        const v = state.reviewers[r].scores[c.id];
+        return `<td style="${td}text-align:center;">${v ? `<strong>${v}</strong>` : "–"}</td>`;
+      }).join("");
+      const bg = i % 2 ? "#FFFFFF" : "#F5F5F5";
+      return `<tr style="background:${bg};"><td style="${td}"><strong>${c.name}</strong></td>${cells}${revs.length > 1 ? `<td style="${td}text-align:center;"><strong>${cv != null ? fmt1(cv) : "–"}</strong></td>` : ""}<td style="${td}">${cv != null ? levelFor(cv) : "–"}</td></tr>`;
+    }).join("");
+
+    const totalsRow = `<tr><td style="${td}border-bottom:0;"><strong>Total</strong></td>${revs.map((r) => { const st = revStats(r); return `<td style="${td}text-align:center;border-bottom:0;"><strong>${st.total}/${MAX}</strong></td>`; }).join("")}${revs.length > 1 ? `<td style="${td}text-align:center;border-bottom:0;"><strong>${fmt1(ov)}</strong></td>` : ""}<td style="${td}border-bottom:0;"></td></tr>`;
+
+    const sfBlock = sf.strengths.length ? `
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:18px 0 0;border-collapse:collapse;"><tr>
+        <td width="50%" style="${F}vertical-align:top;padding:12px 14px;background:#FFF2FD;border-left:4px solid #B01C87;">
+          <div style="font-size:11px;font-weight:bold;letter-spacing:1px;color:#B01C87;text-transform:uppercase;">Top strength${sf.strengths.length > 1 ? "s" : ""}</div>
+          <div style="font-size:14px;color:#3E332D;margin-top:4px;">${sf.strengths.map((c) => c.name).join(", ")}</div></td>
+        <td width="12" style="font-size:0;">&nbsp;</td>
+        <td width="50%" style="${F}vertical-align:top;padding:12px 14px;background:#EFEDFE;border-left:4px solid #582873;">
+          <div style="font-size:11px;font-weight:bold;letter-spacing:1px;color:#582873;text-transform:uppercase;">Development focus</div>
+          <div style="font-size:14px;color:#3E332D;margin-top:4px;">${sf.focus.map((c) => c.name).join(", ")}</div></td>
+      </tr></table>` : "";
+
+    const fbBlocks = revs.filter((r) => state.reviewers[r].feedback.trim()).map((r) => `
+      <div style="${F}margin-top:16px;">
+        <div style="font-size:13px;font-weight:bold;color:${revColor[r]};">Feedback from ${esc(reviewerName(r))} (${ROLE[r].toLowerCase()})</div>
+        <div style="font-size:14px;color:#3E332D;margin-top:5px;line-height:1.5;">${nl2br(state.reviewers[r].feedback.trim())}</div>
+      </div>`).join("");
+
+    const noteItems = includeNotes ? CRITERIA.map((c) => {
+      const ns = revs.filter((r) => (state.reviewers[r].notes[c.id] || "").trim());
+      if (!ns.length) return "";
+      return `<div style="${F}margin-top:10px;font-size:13.5px;color:#3E332D;line-height:1.5;"><strong>${c.name}</strong>${ns.map((r) => `<br><span style="color:${revColor[r]};font-weight:bold;">${esc(reviewerName(r))}:</span> ${nl2br(state.reviewers[r].notes[c.id].trim())}`).join("")}</div>`;
+    }).join("") : "";
+
+    return `<div style="${F}max-width:760px;color:#3E332D;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;"><tr>
+        <td style="${F}background:#B01C87;padding:20px 22px;color:#ffffff;">
+          <div style="font-size:11px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;">Insight · New hire seller onboarding</div>
+          <div style="font-size:24px;font-weight:bold;margin-top:4px;">Role play results</div>
+          <div style="font-size:14px;margin-top:2px;">${esc(hireName())}</div>
+        </td>
+        <td style="${F}background:#B01C87;padding:20px 22px;color:#ffffff;text-align:right;white-space:nowrap;">
+          <div style="font-size:11px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;">Overall</div>
+          <div style="font-size:30px;font-weight:bold;line-height:1.1;">${fmt1(ov)}<span style="font-size:15px;"> / 5</span></div>
+          <div style="font-size:13px;">${levelFor(ov)}</div>
+        </td></tr></table>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:14px;">
+        ${meta.map(([k, v]) => `<tr><td style="${F}font-size:13px;color:#6f6560;padding:3px 0;width:140px;">${k}</td><td style="${F}font-size:13px;color:#3E332D;padding:3px 0;"><strong>${v}</strong></td></tr>`).join("")}
+      </table>
+
+      <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;margin-top:16px;border:1px solid #E0E0E0;">
+        <tr><th style="${th}">Category</th>${revs.map((r) => `<th style="${th}text-align:center;">${ROLE[r]}</th>`).join("")}${revs.length > 1 ? `<th style="${th}text-align:center;">Combined</th>` : ""}<th style="${th}">Rating</th></tr>
+        ${rows}
+        ${totalsRow}
+      </table>
+      <div style="${F}font-size:11.5px;color:#8a807b;margin-top:6px;">Scale: 5 Excellent · 4 Good · 3 Average · 2 Below average · 1 Poor</div>
+      ${sfBlock}
+      ${fbBlocks}
+      ${noteItems ? `<div style="${F}margin-top:18px;font-size:13px;font-weight:bold;color:#582873;text-transform:uppercase;letter-spacing:1px;">Coaching notes by category</div>${noteItems}` : ""}
+    </div>`;
+  }
+
+  function plainText() {
+    const { s, revs, ov, sf, includeNotes } = reportData();
+    const L = [];
+    L.push(`Hi ${firstName(nameFromEmail(s.hireEmail))},`, "");
+    L.push("Thank you for completing your role play as part of New Hire Seller Onboarding. Here's a summary of your results and feedback.", "");
+    L.push(`OVERALL SCORE: ${fmt1(ov)} / 5 (${levelFor(ov)})`, "");
+    L.push(`Role play date: ${prettyDate(s.date)}`);
+    L.push(`Facilitator: ${reviewerName("facilitator")}`);
+    if (leaderGiven()) L.push(`Frontline leader: ${reviewerName("leader")}`);
+    L.push("", "SCORES BY CATEGORY" + (revs.length > 1 ? " (facilitator / frontline leader)" : ""));
+    CRITERIA.forEach((c) => {
+      const parts = revs.map((r) => state.reviewers[r].scores[c.id] || "-").join(" / ");
+      const cv = combined(c.id);
+      L.push(`- ${c.name}: ${parts}${revs.length > 1 ? ` (avg ${fmt1(cv)})` : ""} - ${levelFor(cv)}`);
+    });
+    L.push(`Totals: ${revs.map((r) => `${ROLE[r]} ${revStats(r).total}/${MAX}`).join(", ")}`);
+    if (sf.strengths.length) {
+      L.push("", `TOP STRENGTH${sf.strengths.length > 1 ? "S" : ""}: ${sf.strengths.map((c) => c.name).join(", ")}`);
+      L.push(`DEVELOPMENT FOCUS: ${sf.focus.map((c) => c.name).join(", ")}`);
+    }
+    revs.forEach((r) => {
+      const fb = state.reviewers[r].feedback.trim();
+      if (fb) L.push("", `FEEDBACK FROM ${reviewerName(r).toUpperCase()} (${ROLE[r].toUpperCase()})`, fb);
+    });
+    if (includeNotes) {
+      const notes = [];
+      CRITERIA.forEach((c) => revs.forEach((r) => {
+        const n = (state.reviewers[r].notes[c.id] || "").trim();
+        if (n) notes.push(`- ${c.name} (${reviewerName(r)}): ${n}`);
+      }));
+      if (notes.length) L.push("", "COACHING NOTES", ...notes);
+    }
+    L.push("", "Scale: 5 Excellent, 4 Good, 3 Average, 2 Below average, 1 Poor", "");
+    L.push("Please reach out with any questions. We're glad to have you on the team!", "");
+    L.push(revs.map(reviewerName).join(" and "));
+    return L.join("\n").replace(/\r?\n/g, "\r\n");
+  }
+
+  function recipients() {
+    const s = state.session;
+    const cc = state.cc ? [s.facEmail, s.leadEmail].map((e) => e.trim()).filter(isEmail) : [];
+    return { to: s.hireEmail.trim(), cc };
+  }
+  const subject = () => `Your role play results: Insight New Hire Seller Onboarding`;
+
+  function renderReview() {
+    $("#report").innerHTML = reportHtml();
+    const { to, cc } = recipients();
+    $("#toLine").innerHTML = `<strong>To:</strong> ${esc(hireName())} &lt;${esc(to)}&gt;${cc.length ? `<br><strong>CC:</strong> ${cc.map(esc).join("; ")}` : ""}`;
+    $("#ccReviewers").checked = state.cc;
+    $("#ccReviewers").disabled = ![state.session.facEmail, state.session.leadEmail].some(isEmail);
+    $("#includeNotes").checked = state.includeNotes;
+    const warns = [];
+    REVIEWERS.forEach((r) => { const st = revStats(r); if (st.started && !st.complete) warns.push(`${reviewerName(r)} has scored ${st.count} of ${CRITERIA.length} categories. Their partial scores are included.`); });
+    const gaps = CRITERIA.filter((c) => gap(c.id) >= 2).map((c) => c.name);
+    if (gaps.length) warns.push(`Reviewers are 2+ points apart on: ${gaps.join(", ")}. Consider a quick calibration before sending.`);
+    $("#sendWarn").innerHTML = warns.map((w) => `<div class="warn">${esc(w)}</div>`).join("");
+  }
+
+  $("#ccReviewers").addEventListener("change", (e) => { state.cc = e.target.checked; save(); renderReview(); });
+  $("#includeNotes").addEventListener("change", (e) => { state.includeNotes = e.target.checked; save(); renderReview(); });
+
+  $("#emailBtn").addEventListener("click", () => {
+    const { to, cc } = recipients();
+    const params = [`subject=${encodeURIComponent(subject())}`, `body=${encodeURIComponent(plainText())}`];
+    if (cc.length) params.unshift(`cc=${encodeURIComponent(cc.join(";"))}`);
+    const url = `mailto:${to}?${params.join("&")}`;
+    const a = document.createElement("a"); a.href = url; a.click();
+    toast(url.length > 1900 ? "Email opened. If the message looks cut off, use Copy formatted results and paste it in." : "Opening your email app…");
+  });
+
+  async function copyRich() {
+    const html = reportHtml(), text = plainText();
+    try {
+      if (navigator.clipboard && window.ClipboardItem) {
+        await navigator.clipboard.write([new ClipboardItem({ "text/html": new Blob([html], { type: "text/html" }), "text/plain": new Blob([text], { type: "text/plain" }) })]);
+        return true;
+      }
+    } catch {}
+    // Fallback: select rendered content and copy
+    const tmp = document.createElement("div");
+    tmp.contentEditable = "true"; tmp.innerHTML = html;
+    Object.assign(tmp.style, { position: "fixed", left: "-9999px", top: "0" });
+    document.body.appendChild(tmp);
+    const range = document.createRange(); range.selectNodeContents(tmp);
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    let ok = false; try { ok = document.execCommand("copy"); } catch {}
+    sel.removeAllRanges(); tmp.remove();
+    return ok;
+  }
+  $("#copyBtn").addEventListener("click", async () => toast((await copyRich()) ? "Formatted results copied. Paste into your email." : "Couldn't copy automatically. Select the report and copy it."));
+  $("#printBtn").addEventListener("click", () => window.print());
+
+  // ---------- global ----------
+  $$("[data-goto]").forEach((b) => b.addEventListener("click", () => goto(b.dataset.goto)));
+  $("#toStep2").addEventListener("click", () => goto(2));
+  $("#toStep3").addEventListener("click", () => goto(3));
+  $("#newEval").addEventListener("click", () => {
+    const hasWork = state.session.hireEmail || REVIEWERS.some((r) => revStats(r).started);
+    if (hasWork && !confirm("Start a new evaluation? This clears the current scores and details from this browser.")) return;
+    const keep = { facEmail: state.session.facEmail };
+    state = defaultState(); Object.assign(state.session, keep); save();
+    $$("[data-field]").forEach((el) => { el.value = state.session[el.dataset.field] || ""; el.classList.remove("invalid"); });
+    renderPreviews();
+    goto(1); toast("New evaluation started. Facilitator details kept.");
+  });
+
+  renderPreviews();
+  goto(state.step || 1);
+})();
+</script>
+</body>
+</html>
